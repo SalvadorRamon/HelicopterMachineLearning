@@ -1,0 +1,2 @@
+model_checkpoint_path: "ChopperAttack-dqn-10000"
+all_model_checkpoint_paths: "ChopperAttack-dqn-10000"
