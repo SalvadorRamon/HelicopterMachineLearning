@@ -1,9 +1,7 @@
 # Using Deep Q-Network to Learn How To Play
 ## HelicopterMachineLearning
-### Machine Learning Helicopter
 
 ## Overview
-
 
 ## Installation Dependencies:
 * Python 2.7 or 3
