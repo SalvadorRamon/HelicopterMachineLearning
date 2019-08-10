@@ -13,7 +13,7 @@
 
 ## How to Run?
 ```
-git@github.com:SalvadorRamon/HelicopterMachineLearning.git
+git clone git@github.com:SalvadorRamon/HelicopterMachineLearning.git
 cd HelicopterMachineLearning
 python deep_q_network.py
 ```
@@ -51,8 +51,6 @@ Since deep Q-network is trained on the raw pixel values observed from the game s
 #### Environment
 Since deep Q-network is trained on the raw pixel values observed from the game screen at each time step, [3] finds that remove the background appeared in the original game can make it converge faster. This process can be visualized as the following figure:
 
-<img src="./images/preprocess.png" width="450">
-
 #### Network Architecture
 According to [1], I first preprocessed the game screens with following steps:
 
@@ -61,8 +59,6 @@ According to [1], I first preprocessed the game screens with following steps:
 3. Stack last 4 frames to produce an 80x80x4 input array for network
 
 The architecture of the network is shown in the figure below. The first layer convolves the input image with an 8x8x4x32 kernel at a stride size of 4. The output is then put through a 2x2 max pooling layer. The second layer convolves with a 4x4x32x64 kernel at a stride of 2. We then max pool again. The third layer convolves with a 3x3x64x64 kernel at a stride of 1. We then max pool one more time. The last hidden layer consists of 256 fully connected ReLU nodes.
-
-<img src="./images/network.png">
 
 The final output layer has the same dimensionality as the number of valid actions which can be performed in the game, where the 0th index always corresponds to doing nothing. The values at this output layer represent the Q function given the input state for each valid action. At each time step, the network performs whichever action corresponds to the highest Q value using a ϵ greedy policy.
 
