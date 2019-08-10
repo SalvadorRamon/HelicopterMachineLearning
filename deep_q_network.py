@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 from __future__ import print_function
+
 import tensorflow as tf
 import cv2
 import sys
@@ -16,7 +17,7 @@ GAMMA = 0.99 # decay rate of past observations
 OBSERVE = 10000
 EXPLORE = 3000000
 FINAL_EPSILON = 0.0001
-INITIAL_EPSILON = .0001
+INITIAL_EPSILON = 1
 REPLAY_MEMORY = 50000 # number of previous transitions to remember
 BATCH = 32 # size of minibatch
 FRAME_PER_ACTION = 1
@@ -79,7 +80,7 @@ def trainNetwork(s, readout, h_fc1, sess):
     # define the cost function
     a = tf.placeholder("float", [None, ACTIONS])
     y = tf.placeholder("float", [None])
-    readout_action = tf.reduce_sum(tf.mul(readout, a), reduction_indices=1)
+    readout_action = tf.reduce_sum(tf.multiply(readout, a), reduction_indices=1)
     cost = tf.reduce_mean(tf.square(y - readout_action))
     train_step = tf.train.AdamOptimizer(1e-6).minimize(cost)
 
