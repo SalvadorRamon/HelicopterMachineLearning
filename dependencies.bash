@@ -1,3 +1,13 @@
+sudo apt update
+sudo apt install python-dev python-pip
+sudo pip install -U virtualenv  # system-wide install
+
+pip install --user --upgrade tensorflow  # install in $HOME
+
+sudo apt-get install -y python-pygame
+
+python2
+
 ######################################
 # INSTALL OPENCV ON UBUNTU OR DEBIAN #
 ######################################
@@ -74,13 +84,3 @@ sudo ldconfig
 # 4. EXECUTE SOME OPENCV EXAMPLES AND COMPILE A DEMONSTRATION
 
 # To complete this step, please visit 'http://milq.github.io/install-opencv-ubuntu-debian'.
-
-sudo apt update
-sudo apt install python-dev python-pip
-sudo pip install -U virtualenv  # system-wide install
-
-pip install --user --upgrade tensorflow  # install in $HOME
-
-sudo apt-get install -y python-pygame
-
-python2
