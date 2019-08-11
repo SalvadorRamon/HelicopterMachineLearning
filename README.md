@@ -1,5 +1,4 @@
 # Using Deep Q-Network to Learn How To Play
-## HelicopterMachineLearning
 ### Machine Learning Helicopter
 
 ## Overview
