@@ -75,7 +75,8 @@ sudo ldconfig
 
 # To complete this step, please visit 'http://milq.github.io/install-opencv-ubuntu-debian'.
 
-sudo apt install -y python-dev python-pip
+sudo apt update
+sudo apt install python-dev python-pip
 sudo pip install -U virtualenv  # system-wide install
 
 pip install --user --upgrade tensorflow  # install in $HOME
