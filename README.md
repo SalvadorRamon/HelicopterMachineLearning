@@ -10,6 +10,9 @@
 * pygame
 * OpenCV-Python
 
+If you are running Ubuntu or Debian, you can run dependencies.bash script
+and it will install everything you need.
+
 ## How to Run?
 ```
 git clone git@github.com:SalvadorRamon/HelicopterMachineLearning.git
