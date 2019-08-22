@@ -1,13 +1,3 @@
-sudo apt update
-sudo apt install python-dev python-pip
-sudo pip install -U virtualenv  # system-wide install
-
-pip install --user --upgrade tensorflow  # install in $HOME
-
-sudo apt-get install -y python-pygame
-
-python2
-
 ######################################
 # INSTALL OPENCV ON UBUNTU OR DEBIAN #
 ######################################
@@ -36,6 +26,14 @@ sudo apt-get -y upgrade       # Uncomment to install new versions of packages cu
 sudo apt-get -y dist-upgrade  # Uncomment to handle changing dependencies with new vers. of pack.
 sudo apt-get -y autoremove    # Uncomment to remove packages that are now no longer needed
 
+sudo apt -y install python-dev python-pip
+sudo pip -y install -U virtualenv  # system-wide install
+
+pip install --user --upgrade tensorflow  # install in $HOME
+
+sudo apt-get install -y python-pygame
+
+python2
 
 # 2. INSTALL THE DEPENDENCIES
 
