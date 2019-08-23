@@ -33,8 +33,6 @@ pip install --user --upgrade tensorflow  # install in $HOME
 
 sudo apt-get install -y python-pygame
 
-python2
-
 # 2. INSTALL THE DEPENDENCIES
 
 # Build tools:
