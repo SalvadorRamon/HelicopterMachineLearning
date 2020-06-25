@@ -3,26 +3,36 @@ import sys
 from math import sqrt
 import time
 
-SCREENWIDTH = 720 
+SCREENWIDTH = 720
 SCREENHEIGHT = 480
-FPS = 60 
+FPS = 60
 
-#pygame.mixer.pre_init(44100, -16,2)
+# pygame.mixer.pre_init(44100, -16,2)
 pygame.init()
 
 screen = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))
 # screen = pygame.display.set_mode((1366, 768))
 
 pygame.display.set_caption("Chopper Attack")
+GAME_FONT = pygame.font.SysFont('Comic Sans MS', 30)
+
+
+def score(points):
+    over_font = pygame.font.Font('freesansbold.ttf', 10)
+    over_text = over_font.render("Points : " + str(points), True, (255, 255, 255))
+    screen.blit(over_text, (0, 0))
 
 def GetCurrentTime():
     return pygame.time.get_ticks()
 
+
 def LoadGraphic(path):
     return pygame.image.load(path).convert_alpha()
 
+
 def Collides(elementA, elementB):
     return pygame.sprite.collide_rect(elementA, elementB)
+
 
 class Helicopter(pygame.sprite.Sprite):
     DoNothing = 0
@@ -44,21 +54,20 @@ class Helicopter(pygame.sprite.Sprite):
     def isDead(self):
         return self.health <= 0
 
-    def takeDamage(self, damage = 10):
+    def takeDamage(self, damage=10):
         damage = abs(damage)
         self.health -= damage
         if self.delegate and hasattr(self.delegate, "heliTookDamage"):
             self.delegate.heliTookDamage(self, damage)
 
-
-    def update(self, action):#delta, action):
+    def update(self, action):  # delta, action):
         pygame.event.pump()
         # reward = 0 # If no actions were selected, stick to 0
 
         if self.isDead(): return
 
         # Perform Actions
-        if action[Helicopter.Up]: # If we're doing nothing
+        if action[Helicopter.Up]:  # If we're doing nothing
             print("PLAYER moving up")
             self.moveUp()
 
@@ -72,8 +81,8 @@ class Helicopter(pygame.sprite.Sprite):
     # It's like in the class's "namespace", like in C++, meaning you have to use
     # the class name to call it ( Helicopter.Config(...) )
     @staticmethod
-    def Config(graphic, position, direction , speed = 10, name = "N/A", health = 100):
-        config = dict() # or {}
+    def Config(graphic, position, direction, speed=10, name="N/A", health=100):
+        config = dict()  # or {}
 
         config["graphic"] = graphic
         config["position"] = position
@@ -87,24 +96,24 @@ class Helicopter(pygame.sprite.Sprite):
     def __init__(self, config):
         pygame.sprite.Sprite.__init__(self)
 
-        self.name       = config["name"]
+        self.name = config["name"]
 
-        self.direction  = config["direction"]
-        self.speed      = config["speed"]
+        self.direction = config["direction"]
+        self.speed = config["speed"]
 
-        self.image    = LoadGraphic(config["graphic"])
-        self.rect       = self.image.get_rect()
+        self.image = LoadGraphic(config["graphic"])
+        self.rect = self.image.get_rect()
 
         self.rect.center = config["position"].xy()
 
-        self.health     = config["health"]
-        self.delegate   = None
+        self.health = config["health"]
+        self.delegate = None
 
         self.lastConfig = config
 
-class EnemyHelicopter(Helicopter):
-    def update(self, actions):#, delta):
 
+class EnemyHelicopter(Helicopter):
+    def update(self, actions):
         if self.target.rect.top < self.rect.centery < self.target.rect.bottom:
             if self.timeToFire == 0:
                 print(self.name + " shooting!")
@@ -122,27 +131,15 @@ class EnemyHelicopter(Helicopter):
             print("Moving enemy down")
             self.moveDown()
 
-        # rect.center
-        # rect.centery
-        # rect.centerx
-        # rect.top
-        # rect.bottom
-        # rect.with
-        # rect.height
-        # ecenter = self.rect.centery
-        #
-        # pRange = self.target.rect.top < self.rect.centery < self.target.rect.bottom
-
-
-
-    def __init__(self, config, target, limit = 50):
+    def __init__(self, config, target, limit=20):
         Helicopter.__init__(self, config)
         self.target = target
         self.limit = limit
         self.timeToFire = limit
 
+
 class Projectile(pygame.sprite.Sprite):
-    def __init__(self, damage, position, direction, speed = 20):
+    def __init__(self, damage, position, direction, speed=15):
         pygame.sprite.Sprite.__init__(self)
         self.image = LoadGraphic("images/bullet.png")
         self.rect = self.image.get_rect()
@@ -165,6 +162,7 @@ class Projectile(pygame.sprite.Sprite):
         oldPosition = vector2(self.rect.center)
         newPosition = oldPosition.add(self.direction.scale(self.speed))
         self.rect.center = newPosition.xy()
+
 
 class GameState:
     def frame_step(self, actions):
@@ -199,6 +197,10 @@ class GameState:
         pygame.display.update()
         image = pygame.surfarray.array3d(pygame.display.get_surface())
 
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.display.quit(), sys.exit()
+
         if self.player.isDead():
             self.__init__()
             self.reward = -1
@@ -214,6 +216,7 @@ class GameState:
 
             if projectile.done():
                 if not projectile.used: self.reward += 1
+                score(self.bonus)
                 self.projectiles.remove(projectile)
                 print("Projectile done...")
 
@@ -223,7 +226,7 @@ class GameState:
         heliOffset = heli.image.get_width() / 2
         position = position.add(heli.direction.scale(heliOffset))
 
-        projectile = Projectile(100, vector2(0,0), heli.direction, 25)
+        projectile = Projectile(100, vector2(0, 0), heli.direction, 25)
 
         projOffset = projectile.image.get_width() / 2
         position = position.add(heli.direction.scale(projOffset))
@@ -238,7 +241,6 @@ class GameState:
     def __init__(self):
         self.players = pygame.sprite.Group()
         self.projectiles = pygame.sprite.Group()
-
         self.bonus = 0
 
         # This is the AI (dynamic actions)
@@ -255,7 +257,7 @@ class GameState:
         eGraphic = "images/enemy.png"
         ePosition = vector2(0, SCREENWIDTH / 2)
         eDirection = vector2(1, 0)
-        eSpeed = 20
+        eSpeed = 50
         eConfig = Helicopter.Config(eGraphic, ePosition, eDirection, eSpeed)
         self.enemy = EnemyHelicopter(eConfig, self.player)
         self.enemy.delegate = self
@@ -266,7 +268,7 @@ class GameState:
 
 class vector2:
 
-    def __init__(self, x, y = None):
+    def __init__(self, x, y=None):
         if not y and isinstance(x, tuple):
             y = x[1]
             x = x[0]
@@ -282,23 +284,23 @@ class vector2:
         v = vector2(self.x - other.x, self.y - other.y)
         return v
 
-    def scale(self,scalar):
+    def scale(self, scalar):
         v = vector2(self.x * scalar, self.y * scalar)
         return v
 
     def magnitude(self):
         return sqrt((self.x * self.x) + (self.y * self.y))
 
-    def unitVec(self,magnitude):
-        v = vector2(self.x/magnitude, self.y/magnitude)
+    def unitVec(self, magnitude):
+        v = vector2(self.x / magnitude, self.y / magnitude)
         return v
 
     def normalize(self):
         # type: () -> object
         if self.magnitude() == 0:
-            return vector2(0,0)
+            return vector2(0, 0)
         else:
-            v = vector2(self.x/self.magnitude(),self.y/self.magnitude())
+            v = vector2(self.x / self.magnitude(), self.y / self.magnitude())
             return v
 
     def xy(self):
