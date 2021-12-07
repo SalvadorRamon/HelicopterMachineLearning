@@ -5,13 +5,13 @@
 ## Overview
 
 ## Installation Dependencies:
-* Python 2.7 or 3
+* Python 3
 * TensorFlow
 * pygame
 * OpenCV-Python
 
-If you are running Ubuntu or Debian, you can run dependencies.bash script
-and it will install everything you need.
+I have created a requirements text file to install the modules. However this only works with Python 3, you have to do
+extra steps to make it work with Python 2.
 
 ## How to Run?
 ```
